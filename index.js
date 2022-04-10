@@ -29,8 +29,8 @@ class MultiSimplex {
   }
 }
 const simplex = new MultiSimplex('lol', 6);
-const simplex2 = new MultiSimplex('lol2', 3);
-const simplex3 = new MultiSimplex('lol3', 3);
+// const simplex2 = new MultiSimplex('lol2', 3);
+// const simplex3 = new MultiSimplex('lol3', 3);
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\/]*$/, '$1');
 
