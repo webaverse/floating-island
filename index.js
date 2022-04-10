@@ -34,7 +34,17 @@ const simplex = new MultiSimplex('lol', 6);
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\/]*$/, '$1');
 
-export default () => {
+const loadImage = u => new Promise((resolve, reject) => {
+  const img = new Image();
+  img.onload = () => {
+    resolve(img);
+  };
+  img.onerror = reject;
+  img.crossOrigin = 'Anonymous';
+  img.src = u;
+});
+
+export default e => {
   const app = useApp();
   
   const geometry = (() => {
@@ -111,48 +121,32 @@ export default () => {
   const map = new THREE.Texture();
   map.wrapS = THREE.RepeatWrapping;
   map.wrapT = THREE.RepeatWrapping;
-  {
-    const img = new Image();
-    img.onload = () => {
-      map.image = img;
-      map.needsUpdate = true;
-    };
-    img.onerror = err => {
-      console.warn(err);
-    };
-    img.crossOrigin = 'Anonymous';
-    img.src = baseUrl + texBase + '_Base_Color.png';
-  }
+
   const normalMap = new THREE.Texture();
   normalMap.wrapS = THREE.RepeatWrapping;
   normalMap.wrapT = THREE.RepeatWrapping;
-  {
-    const img = new Image();
-    img.onload = () => {
-      normalMap.image = img;
-      normalMap.needsUpdate = true;
-    };
-    img.onerror = err => {
-      console.warn(err);
-    };
-    img.crossOrigin = 'Anonymous';
-    img.src = baseUrl + texBase + '_Normal.png';
-  }
+
   const heightMap = new THREE.Texture();
   heightMap.wrapS = THREE.RepeatWrapping;
   heightMap.wrapT = THREE.RepeatWrapping;
-  {
-    const img = new Image();
-    img.onload = () => {
+
+  e.waitUntil(Promise.all([
+    (async () => {
+      const img = await loadImage(baseUrl + texBase + '_Base_Color.png');
+      map.image = img;
+      map.needsUpdate = true;
+    })(),
+    (async () => {
+      const img = await loadImage(baseUrl + texBase + '_Normal.png');
+      normalMap.image = img;
+      normalMap.needsUpdate = true;
+    })(),
+    (async () => {
+      const img = await loadImage(baseUrl + texBase + '_Height.png');
       heightMap.image = img;
       heightMap.needsUpdate = true;
-    };
-    img.onerror = err => {
-      console.warn(err);
-    };
-    img.crossOrigin = 'Anonymous';
-    img.src = baseUrl + texBase + '_Height.png';
-  }
+    })(),
+  ]).then(() => {}));
   const material = new THREE.ShaderMaterial({
     uniforms: {
       map: {
