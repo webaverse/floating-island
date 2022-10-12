@@ -2,11 +2,11 @@ import * as THREE from 'three';
 // import {scene, renderer, camera, runtime, world, physics, ui, app, appManager} from 'app';
 import Simplex from './simplex-noise.js';
 import metaversefile from 'metaversefile';
-const {useApp, useGeometryUtils, usePhysics, useCleanup} = metaversefile;
+const {useApp, useThreeUtils, usePhysics, useCleanup} = metaversefile;
 
 //
 
-const geometryUtils = useGeometryUtils();
+const {BufferGeometryUtils} = useThreeUtils();
 
 //
 
@@ -98,7 +98,7 @@ export default e => {
     }
     bottomGeometry.applyMatrix4(new THREE.Matrix4().makeRotationFromQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, -1, 0))));
 
-    let geometry = geometryUtils.mergeBufferGeometries([
+    let geometry = BufferGeometryUtils.mergeBufferGeometries([
       topGeometry,
       bottomGeometry,
     ]);
