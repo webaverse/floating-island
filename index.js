@@ -1,9 +1,14 @@
 import * as THREE from 'three';
-import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 // import {scene, renderer, camera, runtime, world, physics, ui, app, appManager} from 'app';
 import Simplex from './simplex-noise.js';
 import metaversefile from 'metaversefile';
-const {useApp, usePhysics, useCleanup} = metaversefile;
+const {useApp, useGeometryUtils, usePhysics, useCleanup} = metaversefile;
+
+//
+
+const geometryUtils = useGeometryUtils();
+
+//
 
 const localVector = new THREE.Vector3();
 const localVector2 = new THREE.Vector3();
@@ -93,7 +98,7 @@ export default e => {
     }
     bottomGeometry.applyMatrix4(new THREE.Matrix4().makeRotationFromQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, -1, 0))));
 
-    let geometry = BufferGeometryUtils.mergeBufferGeometries([
+    let geometry = geometryUtils.mergeBufferGeometries([
       topGeometry,
       bottomGeometry,
     ]);
